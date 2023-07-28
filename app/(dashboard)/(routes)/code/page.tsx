@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
 import ReactMarkdown from "react-markdown";
+import { useProModal } from "@/hooks/use-pro-modal";
 
 const CodePage = () => {
   const router = useRouter();
@@ -32,6 +33,7 @@ const CodePage = () => {
   });
 
   const isLoading = form.formState.isSubmitting;
+  const proModal = useProModal();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -47,8 +49,9 @@ const CodePage = () => {
       setMessages((current) => [...current, userMessage, response.data]);
       form.reset();
     } catch (error: any) {
-      //TODO: Open Pro Modal
-      console.log(error);
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      }
     } finally {
       router.refresh();
     }
