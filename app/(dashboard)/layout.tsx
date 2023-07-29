@@ -4,7 +4,7 @@ import { getApiLimitCount } from "@/lib/api-limit";
 import { checkSubscription } from "@/lib/subscription";
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
-  const apiLimitCount = await getApiLimitCount();
+  const apiLimitCount = (await getApiLimitCount()) || 0;
 
   const isPro = await checkSubscription();
 
